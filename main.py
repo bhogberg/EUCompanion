@@ -2,16 +2,19 @@ from kivy.lang import Builder
 from kivymd.app import MDApp
 from kivymd.uix.menu import MDDropdownMenu
 from kivy.properties import ObjectProperty
-from kivy.core.window import Window
 import euhandler
 import math
 
-Window.size = (360,600)
+dbug = False
+
+if dbug:
+    from kivy.core.window import Window
+    Window.size = (360,600)
 
 KV = '''
 #:import Clock kivy.clock.Clock
 
-Screen
+Screen:
     
     MDBottomNavigation:
     
@@ -708,10 +711,12 @@ class EuApp(MDApp):
             self.eu.assault = value
             self.screen.ids.defenderPursuing.active = False
             self.screen.ids.attackerPursuing.active = False
-            print('Assault is ', value)
+            if dbug:
+                print('Assault is ', value)
         else:
             self.eu.assault = value
-            print('Assault is ', value)
+            if dbug:
+                print('Assault is ', value)
         self.update()
 
     def defenderpursuingselected(self, instance, value):
@@ -720,10 +725,12 @@ class EuApp(MDApp):
             self.screen.ids.combatTypeSelector.active = True
             self.screen.ids.attackerPursuing.active = False
             self.screen.ids.assaultSelector.active = False
-            print('Defender pursuing is ', value)
+            if dbug:
+                print('Defender pursuing is ', value)
         else:
             self.eu.defender_pursuing = value
-            print('Defender pursuing is ', value)
+            if dbug:
+                print('Defender pursuing is ', value)
         self.update()
 
     def attackerpursuingselected(self, instance, value):
@@ -732,21 +739,25 @@ class EuApp(MDApp):
             self.screen.ids.combatTypeSelector.active = True
             self.screen.ids.defenderPursuing.active = False
             self.screen.ids.assaultSelector.active = False
-            print('Attacker pursuing is ', value)
+            if dbug:
+                print('Attacker pursuing is ', value)
         else:
             self.eu.attacker_pursuing = value
-            print('Attacker pursuing is ', value)
+            if dbug:
+                print('Attacker pursuing is ', value)
         self.update()
 
     def combatselected(self, instance, value):
         if value:
             self.eu.type_of_combat = 'shock'
-            print('shock phase')
+            if dbug:
+                print('shock phase')
         else:
             self.eu.type_of_combat = 'fire'
             self.screen.ids.defenderPursuing.active = False
             self.screen.ids.attackerPursuing.active = False
-            print('fire phase')
+            if dbug:
+                print('fire phase')
         self.update()
 
     def textfield_change(self, textfield, att_or_def, unit):
@@ -756,7 +767,8 @@ class EuApp(MDApp):
             textfield.text = 0
         if int(textfield.text)<0:
             textfield.text = '0'
-        print(att_or_def, ' ', textfield.text,' ', textfield.hint_text)
+        if dbug:
+            print(att_or_def, ' ', textfield.text,' ', textfield.hint_text)
         if att_or_def == 'att':
             self.eu.attacker[unit] = int(textfield.text)
         else:
@@ -796,7 +808,8 @@ class EuApp(MDApp):
             self.eu.results['dinflict']
         )
         self.screen.ids['def_results'].text = def_string
-        self.eu.fancyprint()
+        if dbug:
+            self.eu.fancyprint()
 
 
     def get_id(self, instance):
