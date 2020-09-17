@@ -168,6 +168,16 @@ Screen:
                     size_hint: (1,1.1)
                     spacing: 2
                     
+                    MDTextField:
+                        id: txt_field_inf_att
+                        hint_text: 'Inf'
+                        text: '0'
+                        pos_hint: {"center_y": .5}
+                        input_filter: 'int'
+                        input_type: 'number'
+                        on_focus: Clock.schedule_once(lambda dt: self.select_all()) if self.focus else None
+                        on_text: app.textfield_change(self, 'att', 'inf')
+                    
                     BoxLayout:
                         orientation: 'vertical'
                         spacing: 2
@@ -196,16 +206,17 @@ Screen:
                             text: "-10"
                             size_hint: (1,0.25)
                             on_press: app.increment(self,'inf','att')
+                    
                     MDTextField:
-                        id: txt_field_inf_att
-                        hint_text: 'Inf'
+                        id: txt_field_cav_att
+                        hint_text: "Cav"
                         text: '0'
                         pos_hint: {"center_y": .5}
                         input_filter: 'int'
                         input_type: 'number'
                         on_focus: Clock.schedule_once(lambda dt: self.select_all()) if self.focus else None
-                        on_text: app.textfield_change(self, 'att', 'inf')
-                    
+                        on_text: app.textfield_change(self, 'att', 'cav')
+                        
                     BoxLayout:
                         orientation: 'vertical'
                         spacing: 2
@@ -235,14 +246,15 @@ Screen:
                             on_press: app.increment(self,'cav','att')
                     
                     MDTextField:
-                        id: txt_field_cav_att
-                        hint_text: "Cav"
+                        id: txt_field_art_att
+                        hint_text: "Art"
                         text: '0'
                         pos_hint: {"center_y": .5}
                         input_filter: 'int'
                         input_type: 'number'
                         on_focus: Clock.schedule_once(lambda dt: self.select_all()) if self.focus else None
-                        on_text: app.textfield_change(self, 'att', 'cav')
+                        on_text: app.textfield_change(self, 'att', 'art')
+                        
                     BoxLayout:
                         orientation: 'vertical'
                         spacing: 2
@@ -276,14 +288,15 @@ Screen:
                             on_press: app.increment(self,'art','att')
                     
                     MDTextField:
-                        id: txt_field_art_att
-                        hint_text: "Art"
+                        id: txt_field_pac_att
+                        hint_text: "Pasha"
                         text: '0'
                         pos_hint: {"center_y": .5}
                         input_filter: 'int'
                         input_type: 'number'
                         on_focus: Clock.schedule_once(lambda dt: self.select_all()) if self.focus else None
-                        on_text: app.textfield_change(self, 'att', 'art')
+                        on_text: app.textfield_change(self, 'att', 'pac')
+                        
                     BoxLayout:
                         orientation: 'vertical'
                         spacing: 2
@@ -316,15 +329,7 @@ Screen:
                             pos_hint: {"center_y": .7}
                             on_press: app.increment(self,'pac','att')
                     
-                    MDTextField:
-                        id: txt_field_pac_att
-                        hint_text: "Pasha"
-                        text: '0'
-                        pos_hint: {"center_y": .5}
-                        input_filter: 'int'
-                        input_type: 'number'
-                        on_focus: Clock.schedule_once(lambda dt: self.select_all()) if self.focus else None
-                        on_text: app.textfield_change(self, 'att', 'pac')
+                    
                 
                 MDLabel:
                     text: 'Attackers results:'
@@ -448,6 +453,16 @@ Screen:
                     size_hint: (1,1.1)
                     spacing: 2
                     
+                    MDTextField:
+                        id: txt_field_inf_def
+                        hint_text: 'Inf'
+                        text: '0'
+                        pos_hint: {"center_y": .5}
+                        input_filter: 'int'
+                        input_type: 'number'
+                        on_focus: Clock.schedule_once(lambda dt: self.select_all()) if self.focus else None
+                        on_text: app.textfield_change(self, 'def', 'inf')
+                    
                     BoxLayout:
                         orientation: 'vertical'
                         spacing: 2
@@ -476,16 +491,17 @@ Screen:
                             text: "-10"
                             size_hint: (1,0.25)
                             on_press: app.increment(self,'inf','def')
+                    
                     MDTextField:
-                        id: txt_field_inf_def
-                        hint_text: 'Inf'
+                        id: txt_field_cav_def
+                        hint_text: "Cav"
                         text: '0'
                         pos_hint: {"center_y": .5}
                         input_filter: 'int'
                         input_type: 'number'
                         on_focus: Clock.schedule_once(lambda dt: self.select_all()) if self.focus else None
-                        on_text: app.textfield_change(self, 'def', 'inf')
-                    
+                        on_text: app.textfield_change(self, 'def', 'cav')
+                        
                     BoxLayout:
                         orientation: 'vertical'
                         spacing: 2
@@ -515,14 +531,15 @@ Screen:
                             on_press: app.increment(self,'cav','def')
                     
                     MDTextField:
-                        id: txt_field_cav_def
-                        hint_text: "Cav"
+                        id: txt_field_art_def
+                        hint_text: "Art"
                         text: '0'
                         pos_hint: {"center_y": .5}
                         input_filter: 'int'
                         input_type: 'number'
                         on_focus: Clock.schedule_once(lambda dt: self.select_all()) if self.focus else None
-                        on_text: app.textfield_change(self, 'def', 'cav')
+                        on_text: app.textfield_change(self, 'def', 'art')
+                    
                     BoxLayout:
                         orientation: 'vertical'
                         spacing: 2
@@ -556,14 +573,15 @@ Screen:
                             on_press: app.increment(self,'art','def')
                     
                     MDTextField:
-                        id: txt_field_art_def
-                        hint_text: "Art"
+                        id: txt_field_fcv_def
+                        hint_text: "FortCV"
                         text: '0'
                         pos_hint: {"center_y": .5}
                         input_filter: 'int'
                         input_type: 'number'
                         on_focus: Clock.schedule_once(lambda dt: self.select_all()) if self.focus else None
-                        on_text: app.textfield_change(self, 'def', 'art')
+                        on_text: app.textfield_change(self, 'def', 'frt_cv')
+                        
                     BoxLayout:
                         orientation: 'vertical'
                         spacing: 2
@@ -596,15 +614,7 @@ Screen:
                             pos_hint: {"center_y": .7}
                             on_press: app.increment(self,'fcv','def')
                     
-                    MDTextField:
-                        id: txt_field_fcv_def
-                        hint_text: "FortCV"
-                        text: '0'
-                        pos_hint: {"center_y": .5}
-                        input_filter: 'int'
-                        input_type: 'number'
-                        on_focus: Clock.schedule_once(lambda dt: self.select_all()) if self.focus else None
-                        on_text: app.textfield_change(self, 'def', 'frt_cv')
+                    
                 MDLabel:
                     text: 'Defenders results:'
                     font_style: 'Caption'
