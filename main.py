@@ -145,12 +145,12 @@ Screen:
                     MDLabel:
                         halign: 'right'
                         text: "ModRoll="
-                        font_style: 'Body2'
+                        font_style: 'Body1'
                     MDLabel:
                         id: att_roll_label
                         halign: 'left'
                         text: "3"
-                        font_style: 'Body2'
+                        font_style: 'Body1'
                         
                 MDSlider:
                     size_hint: (1,0.4)
@@ -166,11 +166,13 @@ Screen:
                 BoxLayout: 
                     orientation: 'horizontal'
                     size_hint: (1,1.1)
-                    spacing: 2
+                    spacing: 5
                     
                     MDTextField:
                         id: txt_field_inf_att
                         hint_text: 'Inf'
+                        base_direction: 'rtl'
+                        font_size: '20sp'
                         text: '0'
                         pos_hint: {"center_y": .5}
                         input_filter: 'int'
@@ -210,6 +212,8 @@ Screen:
                     MDTextField:
                         id: txt_field_cav_att
                         hint_text: "Cav"
+                        base_direction: 'rtl'
+                        font_size: '20sp'
                         text: '0'
                         pos_hint: {"center_y": .5}
                         input_filter: 'int'
@@ -248,6 +252,8 @@ Screen:
                     MDTextField:
                         id: txt_field_art_att
                         hint_text: "Art"
+                        base_direction: 'rtl'
+                        font_size: '20sp'
                         text: '0'
                         pos_hint: {"center_y": .5}
                         input_filter: 'int'
@@ -290,6 +296,8 @@ Screen:
                     MDTextField:
                         id: txt_field_pac_att
                         hint_text: "Pasha"
+                        base_direction: 'rtl'
+                        font_size: '20sp'
                         text: '0'
                         pos_hint: {"center_y": .5}
                         input_filter: 'int'
@@ -337,7 +345,7 @@ Screen:
                     size_hint: 1, 0.2
                 MDLabel:
                     id: att_results
-                    text: 'XXX.X pow  table X:  [XX%,-X] res.  cause XX loss'
+                    text: 'XXX.X pow  table X:  [XX%, -X] : cause XX loss'
                     font_style: 'Body1'
                     size_hint: 1, 0.2
                 
@@ -432,12 +440,12 @@ Screen:
                     MDLabel:
                         halign: 'right'
                         text: "ModRoll="
-                        font_style: 'Body2'
+                        font_style: 'Body1'
                     MDLabel:
                         id: def_roll_label
                         halign: 'left'
                         text: "3"
-                        font_style: 'Body2'
+                        font_style: 'Body1'
                         
                 MDSlider:
                     size_hint: (1,0.4)
@@ -456,6 +464,8 @@ Screen:
                     MDTextField:
                         id: txt_field_inf_def
                         hint_text: 'Inf'
+                        base_direction: 'rtl'
+                        font_size: '20sp'
                         text: '0'
                         pos_hint: {"center_y": .5}
                         input_filter: 'int'
@@ -495,6 +505,8 @@ Screen:
                     MDTextField:
                         id: txt_field_cav_def
                         hint_text: "Cav"
+                        base_direction: 'rtl'
+                        font_size: '20sp'
                         text: '0'
                         pos_hint: {"center_y": .5}
                         input_filter: 'int'
@@ -533,6 +545,8 @@ Screen:
                     MDTextField:
                         id: txt_field_art_def
                         hint_text: "Art"
+                        base_direction: 'rtl'
+                        font_size: '20sp'
                         text: '0'
                         pos_hint: {"center_y": .5}
                         input_filter: 'int'
@@ -575,6 +589,8 @@ Screen:
                     MDTextField:
                         id: txt_field_fcv_def
                         hint_text: "FortCV"
+                        base_direction: 'rtl'
+                        font_size: '20sp'
                         text: '0'
                         pos_hint: {"center_y": .5}
                         input_filter: 'int'
@@ -621,7 +637,7 @@ Screen:
                     size_hint: 1, 0.2
                 MDLabel:
                     id: def_results
-                    text: 'XXX.X pow  table X:  [XX%,-X] res.  cause XX loss'
+                    text: 'XXX.X pow  table X:  [XX%, -X] : cause XX loss'
                     font_style: 'Body1'
                     size_hint: 1, 0.2                      
                             
@@ -815,7 +831,7 @@ class EuApp(MDApp):
 
     def update(self):
         self.eu.updateall()
-        base_string = '{0} pow  table {1}:  [{2}%,-{3}] res.  cause {4} loss'
+        base_string = '{0} pow  table {1}:  [{2}%, -{3}] : cause {4} loss'
         att_string = base_string.format(
             self.eu.results['attstr'], self.eu.results['tblatt'],
             self.eu.results['attresult'], self.eu.results['ainflictmorale'],
