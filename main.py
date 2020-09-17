@@ -340,7 +340,7 @@ Screen:
                     
                 
                 MDLabel:
-                    text: 'Attackers results:'
+                    text: 'Attackers results:' 
                     font_style: 'Caption'
                     size_hint: 1, 0.2
                 MDLabel:
