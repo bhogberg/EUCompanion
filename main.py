@@ -97,7 +97,7 @@ Screen:
                     size_hint_max_y: '40dp'
 
                     MDLabel:
-                        text: 'Attacker:'
+                        text: 'Attackers:'
                         font_style: 'Body2'
                     MDDropDownItem:
                         pos_hint: {'center_x': 0, 'center_y': .5}
@@ -120,7 +120,7 @@ Screen:
                 BoxLayout:
                     orientation: 'horizontal'
                     spacing: 2
-                    size_hint: (1,0.2)
+                    size_hint: (1,0.3)
                     MDTextField:
                         id: txt_field_mrl_att
                         hint_text: 'Morale'
@@ -133,13 +133,13 @@ Screen:
                     MDRaisedButton:
                         id: 'mrl+att'
                         pos_hint: {"center_y": .5}
-                        size_hint: (0.2,1)
+                        size_hint: (0.3,1)
                         text: "+"
                         on_press: app.increment(self,'mrl','att')        
                     MDRaisedButton:
                         id: 'mrl-att'
                         pos_hint: {"center_y": .5}
-                        size_hint: (0.2,1)
+                        size_hint: (0.3,1)
                         text: "-"
                         on_press: app.increment(self,'mrl','att')
                     MDLabel:
@@ -165,6 +165,7 @@ Screen:
                     
                 BoxLayout: 
                     orientation: 'horizontal'
+                    size_hint: (1,1.1)
                     spacing: 2
                     
                     BoxLayout:
@@ -326,12 +327,12 @@ Screen:
                         on_text: app.textfield_change(self, 'att', 'pac')
                 
                 MDLabel:
-                    text: 'Attacker results:'
+                    text: 'Attackers results:'
                     font_style: 'Caption'
                     size_hint: 1, 0.2
                 MDLabel:
                     id: att_results
-                    text: 'XX tot. str - table X - [XX%,-X] result - causes XX losses'
+                    text: 'XX tot. str - table X - [XX%,-X] result - cause XX losses'
                     font_style: 'Body2'
                     size_hint: 1, 0.2
                 
@@ -350,9 +351,10 @@ Screen:
                         
                 BoxLayout:
                     orientation: 'horizontal'
+                    size_hint: (1,0.7)
                     MDLabel:
                         pos_hint: {'center_x': 0, 'center_y': .5}
-                        text: 'Defender:'
+                        text: 'Defenders:'
                         font_style: 'Body2'
                         size_hint: 0.4, None
                     MDTextField:
@@ -400,7 +402,7 @@ Screen:
                 BoxLayout:
                     orientation: 'horizontal'
                     spacing: 2
-                    size_hint: (1,0.2)
+                    size_hint: (1,0.3)
                     MDTextField:
                         id: txt_field_mrl_def
                         hint_text: 'Morale'
@@ -411,15 +413,15 @@ Screen:
                         on_focus: Clock.schedule_once(lambda dt: self.select_all()) if self.focus else None
                         on_text: app.textfield_change(self, 'def', 'morale')
                     MDRaisedButton:
-                        id: 'mrl+att'
+                        id: 'mrl+def'
                         pos_hint: {"center_y": .5}
-                        size_hint: (0.2,1)
+                        size_hint: (0.3,1)
                         text: "+"
                         on_press: app.increment(self,'mrl','def')        
                     MDRaisedButton:
-                        id: 'mrl-att'
+                        id: 'mrl-def'
                         pos_hint: {"center_y": .5}
-                        size_hint: (0.2,1)
+                        size_hint: (0.3,1)
                         text: "-"
                         on_press: app.increment(self,'mrl','def')
                     MDLabel:
@@ -443,6 +445,7 @@ Screen:
                     
                 BoxLayout: 
                     orientation: 'horizontal'
+                    size_hint: (1,1.1)
                     spacing: 2
                     
                     BoxLayout:
@@ -603,12 +606,12 @@ Screen:
                         on_focus: Clock.schedule_once(lambda dt: self.select_all()) if self.focus else None
                         on_text: app.textfield_change(self, 'def', 'frt_cv')
                 MDLabel:
-                    text: 'Defender results:'
+                    text: 'Defenders results:'
                     font_style: 'Caption'
                     size_hint: 1, 0.2
                 MDLabel:
                     id: def_results
-                    text: 'XX tot. str - table X - [XX%,-X] result - causes XX losses'
+                    text: 'XX tot. str - table X - [XX%,-X] result - cause XX losses'
                     font_style: 'Body2'
                     size_hint: 1, 0.2                      
                             
@@ -761,25 +764,31 @@ class EuApp(MDApp):
         self.update()
 
     def textfield_change(self, textfield, att_or_def, unit):
-        try:
-            int(textfield.text)
-        except:
-            textfield.text = 0
-        if int(textfield.text)<0:
-            textfield.text = '0'
-        if dbug:
-            print(att_or_def, ' ', textfield.text,' ', textfield.hint_text)
-        if att_or_def == 'att':
-            self.eu.attacker[unit] = int(textfield.text)
+        if textfield.text.isdigit():
+            if int(textfield.text)<0:
+                textfield.text = '0'
+            if dbug:
+                print(att_or_def, ' ', textfield.text,' ', textfield.hint_text)
+            if att_or_def == 'att':
+                self.eu.attacker[unit] = int(textfield.text)
+            else:
+                self.eu.defender[unit] = int(textfield.text)
         else:
-            self.eu.defender[unit] = int(textfield.text)
+            #Field is not a positive digit set values to 0
+            if att_or_def == 'att':
+                self.eu.attacker[unit] = 0
+            else:
+                self.eu.defender[unit] = 0
         self.update()
 
     def increment(self, buttonInstance, unit, att_or_def):
         #Define the id of the text field that needs to be changed
         textId = 'txt_field_'+unit+'_'+att_or_def
         #Get the current value of the field
-        value = int(self.screen.ids[textId].text)
+        if not self.screen.ids[textId].text.isdigit():
+            value = 0
+        else:
+            value = int(self.screen.ids[textId].text)
         #Read the text of the button to decide how to change
         if buttonInstance.text == '+':
             value += 1
@@ -789,12 +798,14 @@ class EuApp(MDApp):
             value += 10
         elif buttonInstance.text == '-10':
             value += -10
+        if value < 0:
+            value = 0
         self.screen.ids[textId].text = str(value)
 
 
     def update(self):
         self.eu.updateall()
-        base_string = '{0} tot. str - table {1} - [{2}%,-{3}] result - causes {4} losses'
+        base_string = '{0} tot. str - table {1} - [{2}%,-{3}] result - cause {4} losses'
         att_string = base_string.format(
             self.eu.results['attstr'], self.eu.results['tblatt'],
             self.eu.results['attresult'], self.eu.results['ainflictmorale'],
