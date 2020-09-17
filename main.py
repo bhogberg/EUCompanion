@@ -5,7 +5,7 @@ from kivy.properties import ObjectProperty
 import euhandler
 import math
 
-dbug = False
+dbug = True
 
 if dbug:
     from kivy.core.window import Window
@@ -337,8 +337,8 @@ Screen:
                     size_hint: 1, 0.2
                 MDLabel:
                     id: att_results
-                    text: 'XX tot. str - table X - [XX%,-X] result - cause XX losses'
-                    font_style: 'Body2'
+                    text: 'XXX.X pow  table X:  [XX%,-X] res.  cause XX loss'
+                    font_style: 'Body1'
                     size_hint: 1, 0.2
                 
                 
@@ -621,8 +621,8 @@ Screen:
                     size_hint: 1, 0.2
                 MDLabel:
                     id: def_results
-                    text: 'XX tot. str - table X - [XX%,-X] result - cause XX losses'
-                    font_style: 'Body2'
+                    text: 'XXX.X pow  table X:  [XX%,-X] res.  cause XX loss'
+                    font_style: 'Body1'
                     size_hint: 1, 0.2                      
                             
                 
@@ -815,7 +815,7 @@ class EuApp(MDApp):
 
     def update(self):
         self.eu.updateall()
-        base_string = '{0} tot. str - table {1} - [{2}%,-{3}] result - cause {4} losses'
+        base_string = '{0} pow  table {1}:  [{2}%,-{3}] res.  cause {4} loss'
         att_string = base_string.format(
             self.eu.results['attstr'], self.eu.results['tblatt'],
             self.eu.results['attresult'], self.eu.results['ainflictmorale'],

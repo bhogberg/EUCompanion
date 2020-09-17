@@ -250,6 +250,6 @@ class eutables():
                     else:
                         return 'A'
                 elif pursuit:
-                    return 'H'
+                    return 'E'
                 else:
                     return self.landshock[self.landtech[player_tech]][self.landtech[opposing_tech]]
