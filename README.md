@@ -1,4 +1,5 @@
 # EUCompanion
 A calculator for AW-EU
-test
+
+Compiles to android if put in /KivyMD/demos/
 

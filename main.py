@@ -5,7 +5,7 @@ from kivy.properties import ObjectProperty
 import euhandler
 import math
 
-dbug = True
+dbug = False
 
 if dbug:
     from kivy.core.window import Window
@@ -171,7 +171,6 @@ Screen:
                     MDTextField:
                         id: txt_field_inf_att
                         hint_text: 'Inf'
-                        base_direction: 'rtl'
                         font_size: '20sp'
                         text: '0'
                         pos_hint: {"center_y": .5}
@@ -212,7 +211,6 @@ Screen:
                     MDTextField:
                         id: txt_field_cav_att
                         hint_text: "Cav"
-                        base_direction: 'rtl'
                         font_size: '20sp'
                         text: '0'
                         pos_hint: {"center_y": .5}
@@ -252,7 +250,6 @@ Screen:
                     MDTextField:
                         id: txt_field_art_att
                         hint_text: "Art"
-                        base_direction: 'rtl'
                         font_size: '20sp'
                         text: '0'
                         pos_hint: {"center_y": .5}
@@ -296,7 +293,6 @@ Screen:
                     MDTextField:
                         id: txt_field_pac_att
                         hint_text: "Pasha"
-                        base_direction: 'rtl'
                         font_size: '20sp'
                         text: '0'
                         pos_hint: {"center_y": .5}
@@ -464,7 +460,6 @@ Screen:
                     MDTextField:
                         id: txt_field_inf_def
                         hint_text: 'Inf'
-                        base_direction: 'rtl'
                         font_size: '20sp'
                         text: '0'
                         pos_hint: {"center_y": .5}
@@ -505,7 +500,6 @@ Screen:
                     MDTextField:
                         id: txt_field_cav_def
                         hint_text: "Cav"
-                        base_direction: 'rtl'
                         font_size: '20sp'
                         text: '0'
                         pos_hint: {"center_y": .5}
@@ -545,7 +539,6 @@ Screen:
                     MDTextField:
                         id: txt_field_art_def
                         hint_text: "Art"
-                        base_direction: 'rtl'
                         font_size: '20sp'
                         text: '0'
                         pos_hint: {"center_y": .5}
@@ -589,7 +582,6 @@ Screen:
                     MDTextField:
                         id: txt_field_fcv_def
                         hint_text: "FortCV"
-                        base_direction: 'rtl'
                         font_size: '20sp'
                         text: '0'
                         pos_hint: {"center_y": .5}
