@@ -13,10 +13,10 @@ class euhandler():
         # Below are lists of:
         # [inf,cav,art,fortress cv,fortress lvl,transports, galleys, warships, morale]
         self.attacker = dict([('inf',0),('cav',0),('art',0),('pac',0),
-                        ('trs',0),('ga',0),('war',0),
+                        ('trs',0),('gal',0),('war',0),
                         ('morale',0),('ltech','MED'),('ntech','GA'),('roll',0)])
         self.defender = dict([('inf',0),('cav',0),('art',0),('pac',0),
-                        ('trs',0),('ga',0),('war',0),
+                        ('trs',0),('gal',0),('war',0),
                         ('morale',0),('ltech','MED'),('ntech','GA'),('frt_cv',0),('frt_lvl',0),
                         ('roll',0)])
         self.assault = False
@@ -25,6 +25,7 @@ class euhandler():
         self.land_or_naval = 'land'
         self.type_of_combat = 'fire'
         self.terrain = 'clear'
+        self.breach = 'False'
         self.results = dict([
                 ('tblatt','na'),('tbldef','na'),
                 ('attstr',0),('defstr',0),
@@ -35,18 +36,22 @@ class euhandler():
     
         
     def deffortstr(self):
+        power = 0
         if self.type_of_combat == 'fire':
             if self.defender['ltech']=='MED':
-                return 0
+                power = 0
             elif self.defender['ltech']=='REN':
-                return self.defender['frt_lvl']
+                power = self.defender['frt_lvl']
             elif self.defender['ltech']=='ARQ':
-                return self.defender['frt_cv']/2.0
+                power = self.defender['frt_cv']/2.0
             else:
-                return self.defender['frt_cv']
+                power = self.defender['frt_cv']
         else:
             #assumes 'shock'
-            return self.defender['frt_cv']
+            power = self.defender['frt_cv']
+        if self.breach:
+            power = round(power/4.0)
+        return power
         
     def updateall(self):
         #just simple for now, no naval

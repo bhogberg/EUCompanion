@@ -5,7 +5,7 @@ from kivy.properties import ObjectProperty
 import euhandler
 import math
 
-dbug = False
+dbug = True
 
 if dbug:
     from kivy.core.window import Window
@@ -97,8 +97,26 @@ Screen:
                     size_hint_max_y: '40dp'
 
                     MDLabel:
-                        text: 'Attackers:'
+                        text: 'Attacker:'
                         font_style: 'Body2'
+                    
+                    BoxLayout:
+                        orientation: 'horizontal'
+                        MDLabel:
+                            size_hint: None, None
+                            size: "60dp", "48dp" 
+                            pos_hint:{'center_y': 0.5}
+                            halign: 'right'
+                            text: 'Breach'
+                            font_style: 'Body2'
+                        MDCheckbox: 
+                            id: breachCheckbox
+                            halign: 'left'
+                            size_hint: None, None
+                            pos_hint: {'x': 0.0, 'center_y': .5}
+                            size: "48dp", "48dp" 
+                            on_active: app.breachselected(*args) 
+                    
                     MDDropDownItem:
                         pos_hint: {'center_x': 0, 'center_y': .5}
                         id: attackerTechButton
@@ -109,10 +127,14 @@ Screen:
                         orientation: 'horizontal'
                         MDLabel:
                             halign: 'right'
-                            text: "Pursuing?"
+                            pos_hint: {'center_y': .5}
+                            text: "Pursuing"
+                            size_hint: None, None
+                            size: "60dp", "48dp" 
                             font_style: 'Body2'
                         MDCheckbox:
                             id: attackerPursuing
+                            halign: 'left'
                             pos_hint: {'center_x': .95, 'center_y': .5}
                             size_hint: None, None
                             size: "48dp", "48dp" 
@@ -644,7 +666,319 @@ Screen:
         MDBottomNavigationItem:
             name: 'NavalScreen'
             text: 'Naval'
-            icon: 'ship-wheel'       
+            icon: 'ship-wheel'
+            
+            BoxLayout:
+                orientation: 'vertical'
+                padding: '10dp'
+                spacing: 3
+                
+                GridLayout: 
+                    cols: 3
+                    size_hint_max_y: '40dp'
+                    
+                    Widget: 
+                    
+                    FloatLayout:
+                        MDLabel:
+                            text: 'Fire'
+                            pos_hint: {'x': .1, 'center_y': .5}
+                            font_style: 'Caption'
+
+                        MDIcon:
+                            pos_hint: {'x': 0.25, 'center_y': .5}
+                            icon: 'fire'
+                        
+                        MDSwitch:
+                            pos_hint: {'x': .4, 'center_y': .5}
+                            id: combatTypeSelector
+                            on_active: app.combatselected(*args)
+                        
+                        MDIcon:
+                            icon: 'sail-boat'
+                            pos_hint: {'x': .75, 'center_y': .5}
+                                
+                        MDLabel:
+                            pos_hint: {'x': .95, 'center_y': .5}
+                            text: "Board"
+                            font_style: 'Caption'
+                            
+                    Widget:
+                    
+                  
+                    
+                        
+                Widget:
+                    id: separator
+                    size_hint_y: None
+                    height: 6
+                    canvas:
+                        Color:
+                            rgba: 0., 0., 1., 0.5
+                        Rectangle:
+                            pos: 10, separator.center_y
+                            size: separator.width, 2 
+                
+                BoxLayout:
+                    orientation: 'horizontal'
+                    size_hint_max_y: '40dp'
+
+                    MDLabel:
+                        text: 'Attacker:'
+                        size_hint: (0.7, 1)
+                        font_style: 'Body2'
+                    MDLabel:
+                        text: 'WGmod = '
+                        halign: 'right'
+                        font_style: 'Body2'
+                    
+                    MDLabel:
+                        size_hint: (0.4, 1)
+                        id: att_wind_gauge_modifier_text
+                        halign: 'left'
+                        text: '+-'
+                        font_style: 'Body2'
+                    
+                    MDDropDownItem:
+                        pos_hint: { 'center_y': .5}
+                        id: attackerNavalTechButton
+                        text: 'GA'
+                        font_size: '14sp'
+                        on_release: app.attackernavaltechmenu.open()
+                    BoxLayout:
+                        orientation: 'horizontal'
+                        MDLabel:
+                            halign: 'right'
+                            pos_hint: {'center_y': .5}
+                            text: "Pursuing"
+                            size_hint: None, None
+                            size: "60dp", "48dp" 
+                            font_style: 'Body2'
+                        MDCheckbox:
+                            id: attackerPursuing
+                            halign: 'left'
+                            pos_hint: {'center_x': .95, 'center_y': .5}
+                            size_hint: None, None
+                            size: "48dp", "48dp" 
+                            on_active: app.attackerpursuingselected(*args)
+                BoxLayout:
+                    orientation: 'horizontal'
+                    spacing: 2
+                    size_hint: (1,0.3)
+                    MDTextField:
+                        id: txt_field_mrl_att
+                        hint_text: 'Morale'
+                        text: '0'
+                        pos_hint: {"center_y": .5}
+                        input_filter: 'int'
+                        input_type: 'number'
+                        on_focus: Clock.schedule_once(lambda dt: self.select_all()) if self.focus else None
+                        on_text: app.textfield_change(self, 'att', 'morale')
+                    MDRaisedButton:
+                        id: 'mrl+att'
+                        pos_hint: {"center_y": .5}
+                        size_hint: (0.3,1)
+                        text: "+"
+                        on_press: app.increment(self,'mrl','att')        
+                    MDRaisedButton:
+                        id: 'mrl-def'
+                        pos_hint: {"center_y": .5}
+                        size_hint: (0.3,1)
+                        text: "-"
+                        on_press: app.increment(self,'mrl','att')
+                    MDLabel:
+                        halign: 'right'
+                        text: "ModRoll="
+                        font_style: 'Body1'
+                    MDLabel:
+                        id: att_roll_label
+                        halign: 'left'
+                        text: "3"
+                        font_style: 'Body1'
+                        
+                MDSlider:
+                    size_hint: (1,0.4)
+                    id: attacker_roll_slider
+                    hint: False
+                    min: 3
+                    max: 14
+                    value: 3
+                    on_value: app.roll_slider_change('att',self.value)
+                    
+                    
+                BoxLayout: 
+                    orientation: 'horizontal'
+                    size_hint: (1,1.1)
+                    spacing: 5
+                    
+                    MDTextField:
+                        id: txt_field_trs_att
+                        hint_text: 'Trs'
+                        font_size: '20sp'
+                        text: '0'
+                        pos_hint: {"center_y": .5}
+                        input_filter: 'int'
+                        input_type: 'number'
+                        on_focus: Clock.schedule_once(lambda dt: self.select_all()) if self.focus else None
+                        on_text: app.textfield_change(self, 'att', 'trs')
+                    
+                    BoxLayout:
+                        orientation: 'vertical'
+                        spacing: 2
+                        
+                        MDRaisedButton:
+                            size_hint: (1,0.25)
+                            id: 'trs+att'
+                            text: "+"
+                            on_press: app.increment(self,'trs','att')
+                    
+                
+                        MDRaisedButton:
+                            id: 'trs-att'
+                            size_hint: (1,0.25)
+                            text: "-"
+                            on_press: app.increment(self,'trs','att')
+                            
+                        MDRaisedButton:
+                            id: 'trs+10att'
+                            size_hint: (1,0.25)
+                            text: "+10"
+                            on_press: app.increment(self,'trs','att')
+                        
+                        MDRaisedButton:
+                            id: 'trs-10att'
+                            text: "-10"
+                            size_hint: (1,0.25)
+                            on_press: app.increment(self,'trs','att')
+                    
+                    MDTextField:
+                        id: txt_field_gal_att
+                        hint_text: "Ga"
+                        font_size: '20sp'
+                        text: '0'
+                        pos_hint: {"center_y": .5}
+                        input_filter: 'int'
+                        input_type: 'number'
+                        on_focus: Clock.schedule_once(lambda dt: self.select_all()) if self.focus else None
+                        on_text: app.textfield_change(self, 'att', 'gal')
+                        
+                    BoxLayout:
+                        orientation: 'vertical'
+                        spacing: 2
+                        MDRaisedButton:
+                            id: 'gal+att'
+                            size_hint: (1,0.25)
+                            text: "+"
+                            on_press: app.increment(self,'gal','att')
+                        
+                    
+                        MDRaisedButton:
+                            id: 'gal-att'
+                            size_hint: (1,0.25)
+                            text: "-"
+                            on_press: app.increment(self,'gal','att')
+                            
+                        MDRaisedButton:
+                            id: 'gal+10att'
+                            size_hint: (1,0.25)
+                            text: "+10"
+                            on_press: app.increment(self,'gal','att')
+                        
+                        MDRaisedButton:
+                            id: 'gal-10att'
+                            size_hint: (1,0.25)
+                            text: "-10"
+                            on_press: app.increment(self,'gal','att')
+                    
+                    MDTextField:
+                        id: txt_field_war_att
+                        hint_text: "War"
+                        font_size: '20sp'
+                        text: '0'
+                        pos_hint: {"center_y": .5}
+                        input_filter: 'int'
+                        input_type: 'number'
+                        on_focus: Clock.schedule_once(lambda dt: self.select_all()) if self.focus else None
+                        on_text: app.textfield_change(self, 'att', 'war')
+                        
+                    BoxLayout:
+                        orientation: 'vertical'
+                        spacing: 2
+                        MDRaisedButton:
+                            id: 'war+att'
+                            size_hint: (1,0.25)
+                            text: "+"
+                            pos_hint: {"center_y": .7}
+                            on_press: app.increment(self,'war','att')
+                        
+                    
+                        MDRaisedButton:
+                            id: 'war-att'
+                            size_hint: (1,0.25)
+                            text: "-"
+                            pos_hint: {"center_y": .7}
+                            on_press: app.increment(self,'war','att')
+                            
+                        MDRaisedButton:
+                            id: 'war+10att'
+                            size_hint: (1,0.25)
+                            text: "+10"
+                            pos_hint: {"center_y": .7}
+                            on_press: app.increment(self,'war','att')
+                        
+                        MDRaisedButton:
+                            id: 'war-10att'
+                            size_hint: (1,0.25)
+                            text: "-10"
+                            pos_hint: {"center_y": .7}
+                            on_press: app.increment(self,'war','att')
+                    
+                    
+                        
+                    
+                
+                            
+                Widget:
+                    id: separator
+                    size_hint_y: None
+                    height: 6
+                    canvas:
+                        Color:
+                            rgba: 0., 0., 1., 0.5
+                        Rectangle:
+                            pos: 10, separator.center_y
+                            size: separator.width, 2 
+                    
+                BoxLayout:
+                    orientation: 'horizontal'
+                    size_hint_max_y: '40dp'
+
+                    MDLabel:
+                        text: 'Defender:'
+                        font_style: 'Body2'
+                    
+                    MDDropDownItem:
+                        pos_hint: {'center_x': 0.5, 'center_y': .5}
+                        id: defenderNavalTechButton
+                        text: 'GA'
+                        font_size: '14sp'
+                        on_release: app.defendernavaltechmenu.open()
+                    BoxLayout:
+                        orientation: 'horizontal'
+                        MDLabel:
+                            halign: 'right'
+                            pos_hint: {'center_y': .5}
+                            text: "Pursuing"
+                            size_hint: None, None
+                            size: "60dp", "48dp" 
+                            font_style: 'Body2'
+                        MDCheckbox:
+                            id: defenderPursuing
+                            halign: 'left'
+                            pos_hint: {'center_x': .95, 'center_y': .5}
+                            size_hint: None, None
+                            size: "48dp", "48dp" 
+                            on_active: app.defenderpursuingselected(*args)        
 '''
 
 
@@ -698,12 +1032,56 @@ class EuApp(MDApp):
         )
         self.defendertechmenu.bind(on_release=self.defendertechmenu_item_selected)
 
+        self.attackernavaltechmenu = MDDropdownMenu(
+            caller=self.screen.ids.attackerNavalTechButton,
+            items=[{"viewclass": "MDMenuItem", "text": "GA"},
+                   {"viewclass": "MDMenuItem", "text": "CAR"},
+                   {"viewclass": "MDMenuItem", "text": "GLN"},
+                   {"viewclass": "MDMenuItem", "text": "LS"},
+                   {"viewclass": "MDMenuItem", "text": "BA"},
+                   {"viewclass": "MDMenuItem", "text": "VE"},
+                   {"viewclass": "MDMenuItem", "text": "T-D"}
+                   ],
+            width_mult=3,
+            opening_time=0
+        )
+        self.attackernavaltechmenu.bind(on_release=self.attackernavaltechmenu_item_selected)
+
+        self.defendernavaltechmenu = MDDropdownMenu(
+            caller=self.screen.ids.defenderNavalTechButton,
+            items=[{"viewclass": "MDMenuItem", "text": "GA"},
+                   {"viewclass": "MDMenuItem", "text": "CAR"},
+                   {"viewclass": "MDMenuItem", "text": "GLN"},
+                   {"viewclass": "MDMenuItem", "text": "LS"},
+                   {"viewclass": "MDMenuItem", "text": "BA"},
+                   {"viewclass": "MDMenuItem", "text": "VE"},
+                   {"viewclass": "MDMenuItem", "text": "T-D"}
+                   ],
+            width_mult=3,
+            opening_time=0
+        )
+        self.defendernavaltechmenu.bind(on_release=self.defendernavaltechmenu_item_selected)
+
+
     def terrainmenu_item_selected(self, instance_menu, instance_menu_item):
         self.screen.ids.terrainButton.set_item(instance_menu_item.text)
         terrconv = {'Clear': 'clear', 'Mount.': 'mountain', 'Forest': 'forest', 'Marsh': 'marsh'}
         self.eu.terrain = terrconv[instance_menu_item.text]
         self.update()
         self.terrainmenu.dismiss()
+
+    def attackernavaltechmenu_item_selected(self, instance_menu, instance_menu_item):
+        self.screen.ids.attackerNavalTechButton.set_item(instance_menu_item.text)
+        self.eu.attacker['ntech'] = instance_menu_item.text
+        self.update()
+        self.attackernavaltechmenu.dismiss()
+
+    def defendernavaltechmenu_item_selected(self, instance_menu, instance_menu_item):
+        self.screen.ids.defenderNavalTechButton.set_item(instance_menu_item.text)
+        self.eu.defender['ntech'] = instance_menu_item.text
+        self.update()
+        self.defendernavaltechmenu.dismiss()
+
 
     def attackertechmenu_item_selected(self, instance_menu, instance_menu_item):
         self.screen.ids.attackerTechButton.set_item(instance_menu_item.text)
@@ -752,6 +1130,13 @@ class EuApp(MDApp):
             self.eu.defender_pursuing = value
             if dbug:
                 print('Defender pursuing is ', value)
+        self.update()
+
+    def breachselected(self, instance, value):
+        if value:
+            self.eu.breach = True
+        else:
+            self.eu.breach = False
         self.update()
 
     def attackerpursuingselected(self, instance, value):
