@@ -13,6 +13,8 @@ if dbug:
 
 KV = '''
 #:import Clock kivy.clock.Clock
+#:include landscreen.kv
+#:include navalscreen.kv
 
 Screen:
     
@@ -22,963 +24,25 @@ Screen:
             name: 'LandScreen'
             text: 'Land'
             icon: 'run'
-    
-            BoxLayout:
-                orientation: 'vertical'
-                padding: '10dp'
-                spacing: 3
-                
-                BoxLayout: 
-                    orientation: 'horizontal'
-                    size_hint_max_y: '40dp'
-                        
-                        
-                    MDDropDownItem:
-                        pos_hint: {'center_x': .5, 'center_y': .5}
-                        id: terrainButton
-                        text: 'Clear'
-                        font_size: '14sp'
-                        on_release: app.terrainmenu.open()
-                    
-                    FloatLayout:
-                        MDLabel:
-                            text: 'Fire'
-                            pos_hint: {'x': .1, 'center_y': .5}
-                            font_style: 'Caption'
-                        
-                        
-                        MDIcon:
-                            pos_hint: {'x': 0.25, 'center_y': .5}
-                            icon: 'fire'
-                        
-                        MDSwitch:
-                            pos_hint: {'x': .4, 'center_y': .5}
-                            id: combatTypeSelector
-                            on_active: app.combatselected(*args)
-                        
-                        MDIcon:
-                            icon: 'sword-cross'
-                            pos_hint: {'x': .75, 'center_y': .5}
-                                
-                        MDLabel:
-                            pos_hint: {'x': .95, 'center_y': .5}
-                            text: "Shock"
-                            font_style: 'Caption'
-                    
-                    FloatLayout:
-                        orientation: 'horizontal'
-                        pos_hint: {'center_x': .5, 'center_y': .5}
-
-                        MDLabel:
-                            pos_hint: {'center_x': .9, 'center_y': .5}
-                            text: "Assault?"
-                            font_style: 'Body2'
-                            
-                        MDCheckbox:
-                            id: assaultSelector
-                            pos_hint: {'center_x': .95, 'center_y': .5}
-                            size_hint: None, None
-                            size: "48dp", "48dp"
-                            on_active: app.assaultselected(*args)
-                        
-                Widget:
-                    id: separator
-                    size_hint_y: None
-                    height: 6
-                    canvas:
-                        Color:
-                            rgba: 0., 0., 1., 0.5
-                        Rectangle:
-                            pos: 10, separator.center_y
-                            size: separator.width, 2
-                
-                BoxLayout:
-                    orientation: 'horizontal'
-                    size_hint_max_y: '40dp'
-
-                    MDLabel:
-                        text: 'Attacker:'
-                        font_style: 'Body2'
-                    
-                    BoxLayout:
-                        orientation: 'horizontal'
-                        MDLabel:
-                            size_hint: None, None
-                            size: "60dp", "48dp" 
-                            pos_hint:{'center_y': 0.5}
-                            halign: 'right'
-                            text: 'Breach'
-                            font_style: 'Body2'
-                        MDCheckbox: 
-                            id: breachCheckbox
-                            halign: 'left'
-                            size_hint: None, None
-                            pos_hint: {'x': 0.0, 'center_y': .5}
-                            size: "48dp", "48dp" 
-                            on_active: app.breachselected(*args) 
-                    
-                    MDDropDownItem:
-                        pos_hint: {'center_x': 0, 'center_y': .5}
-                        id: attackerTechButton
-                        text: 'MED'
-                        font_size: '14sp'
-                        on_release: app.attackertechmenu.open()
-                    BoxLayout:
-                        orientation: 'horizontal'
-                        MDLabel:
-                            halign: 'right'
-                            pos_hint: {'center_y': .5}
-                            text: "Pursuing"
-                            size_hint: None, None
-                            size: "60dp", "48dp" 
-                            font_style: 'Body2'
-                        MDCheckbox:
-                            id: attackerPursuing
-                            halign: 'left'
-                            pos_hint: {'center_x': .95, 'center_y': .5}
-                            size_hint: None, None
-                            size: "48dp", "48dp" 
-                            on_active: app.attackerpursuingselected(*args) 
-                BoxLayout:
-                    orientation: 'horizontal'
-                    spacing: 2
-                    size_hint: (1,0.3)
-                    MDTextField:
-                        id: txt_field_mrl_att
-                        hint_text: 'Morale'
-                        text: '0'
-                        pos_hint: {"center_y": .5}
-                        input_filter: 'int'
-                        input_type: 'number'
-                        on_focus: Clock.schedule_once(lambda dt: self.select_all()) if self.focus else None
-                        on_text: app.textfield_change(self, 'att', 'morale')
-                    MDRaisedButton:
-                        id: 'mrl+att'
-                        pos_hint: {"center_y": .5}
-                        size_hint: (0.3,1)
-                        text: "+"
-                        on_press: app.increment(self,'mrl','att')        
-                    MDRaisedButton:
-                        id: 'mrl-att'
-                        pos_hint: {"center_y": .5}
-                        size_hint: (0.3,1)
-                        text: "-"
-                        on_press: app.increment(self,'mrl','att')
-                    MDLabel:
-                        halign: 'right'
-                        text: "ModRoll="
-                        font_style: 'Body1'
-                    MDLabel:
-                        id: att_roll_label
-                        halign: 'left'
-                        text: "3"
-                        font_style: 'Body1'
-                        
-                MDSlider:
-                    size_hint: (1,0.4)
-                    hint: False
-                    id: attacker_roll_slider
-                    min: 3
-                    max: 14
-                    value: 3
-                    on_value: app.roll_slider_change('att',self.value)
-                
-                
-                    
-                BoxLayout: 
-                    orientation: 'horizontal'
-                    size_hint: (1,1.1)
-                    spacing: 5
-                    
-                    MDTextField:
-                        id: txt_field_inf_att
-                        hint_text: 'Inf'
-                        font_size: '20sp'
-                        text: '0'
-                        pos_hint: {"center_y": .5}
-                        input_filter: 'int'
-                        input_type: 'number'
-                        on_focus: Clock.schedule_once(lambda dt: self.select_all()) if self.focus else None
-                        on_text: app.textfield_change(self, 'att', 'inf')
-                    
-                    BoxLayout:
-                        orientation: 'vertical'
-                        spacing: 2
-                        
-                        MDRaisedButton:
-                            size_hint: (1,0.25)
-                            id: 'inf+att'
-                            text: "+"
-                            on_press: app.increment(self,'inf','att')
-                    
-                
-                        MDRaisedButton:
-                            id: 'inf-att'
-                            size_hint: (1,0.25)
-                            text: "-"
-                            on_press: app.increment(self,'inf','att')
-                            
-                        MDRaisedButton:
-                            id: 'inf+10att'
-                            size_hint: (1,0.25)
-                            text: "+10"
-                            on_press: app.increment(self,'inf','att')
-                        
-                        MDRaisedButton:
-                            id: 'inf-10att'
-                            text: "-10"
-                            size_hint: (1,0.25)
-                            on_press: app.increment(self,'inf','att')
-                    
-                    MDTextField:
-                        id: txt_field_cav_att
-                        hint_text: "Cav"
-                        font_size: '20sp'
-                        text: '0'
-                        pos_hint: {"center_y": .5}
-                        input_filter: 'int'
-                        input_type: 'number'
-                        on_focus: Clock.schedule_once(lambda dt: self.select_all()) if self.focus else None
-                        on_text: app.textfield_change(self, 'att', 'cav')
-                        
-                    BoxLayout:
-                        orientation: 'vertical'
-                        spacing: 2
-                        MDRaisedButton:
-                            id: 'cav+att'
-                            size_hint: (1,0.25)
-                            text: "+"
-                            on_press: app.increment(self,'cav','att')
-                        
-                    
-                        MDRaisedButton:
-                            id: 'cav-att'
-                            size_hint: (1,0.25)
-                            text: "-"
-                            on_press: app.increment(self,'cav','att')
-                            
-                        MDRaisedButton:
-                            id: 'cav+10att'
-                            size_hint: (1,0.25)
-                            text: "+10"
-                            on_press: app.increment(self,'cav','att')
-                        
-                        MDRaisedButton:
-                            id: 'cav-10att'
-                            size_hint: (1,0.25)
-                            text: "-10"
-                            on_press: app.increment(self,'cav','att')
-                    
-                    MDTextField:
-                        id: txt_field_art_att
-                        hint_text: "Art"
-                        font_size: '20sp'
-                        text: '0'
-                        pos_hint: {"center_y": .5}
-                        input_filter: 'int'
-                        input_type: 'number'
-                        on_focus: Clock.schedule_once(lambda dt: self.select_all()) if self.focus else None
-                        on_text: app.textfield_change(self, 'att', 'art')
-                        
-                    BoxLayout:
-                        orientation: 'vertical'
-                        spacing: 2
-                        MDRaisedButton:
-                            id: 'art+att'
-                            size_hint: (1,0.25)
-                            text: "+"
-                            pos_hint: {"center_y": .7}
-                            on_press: app.increment(self,'art','att')
-                        
-                    
-                        MDRaisedButton:
-                            id: 'art-att'
-                            size_hint: (1,0.25)
-                            text: "-"
-                            pos_hint: {"center_y": .7}
-                            on_press: app.increment(self,'art','att')
-                            
-                        MDRaisedButton:
-                            id: 'cav+10att'
-                            size_hint: (1,0.25)
-                            text: "+10"
-                            pos_hint: {"center_y": .7}
-                            on_press: app.increment(self,'art','att')
-                        
-                        MDRaisedButton:
-                            id: 'cav-10att'
-                            size_hint: (1,0.25)
-                            text: "-10"
-                            pos_hint: {"center_y": .7}
-                            on_press: app.increment(self,'art','att')
-                    
-                    MDTextField:
-                        id: txt_field_pac_att
-                        hint_text: "Pasha"
-                        font_size: '20sp'
-                        text: '0'
-                        pos_hint: {"center_y": .5}
-                        input_filter: 'int'
-                        input_type: 'number'
-                        on_focus: Clock.schedule_once(lambda dt: self.select_all()) if self.focus else None
-                        on_text: app.textfield_change(self, 'att', 'pac')
-                        
-                    BoxLayout:
-                        orientation: 'vertical'
-                        spacing: 2
-                        MDRaisedButton:
-                            id: 'pac+att'
-                            size_hint: (1,0.25)
-                            text: "+"
-                            pos_hint: {"center_y": .7}
-                            on_press: app.increment(self,'pac','att')
-                        
-                    
-                        MDRaisedButton:
-                            id: 'pac-att'
-                            size_hint: (1,0.25)
-                            text: "-"
-                            pos_hint: {"center_y": .7}
-                            on_press: app.increment(self,'pac','att')
-                            
-                        MDRaisedButton:
-                            id: 'pac+10att'
-                            size_hint: (1,0.25)
-                            text: "+10"
-                            pos_hint: {"center_y": .7}
-                            on_press: app.increment(self,'pac','att')
-                        
-                        MDRaisedButton:
-                            id: 'pac-10att'
-                            size_hint: (1,0.25)
-                            text: "-10"
-                            pos_hint: {"center_y": .7}
-                            on_press: app.increment(self,'pac','att')
-                    
-                    
-                
-                MDLabel:
-                    text: 'Attackers results:' 
-                    font_style: 'Caption'
-                    size_hint: 1, 0.2
-                MDLabel:
-                    id: att_results
-                    text: 'XXX.X pow  table X:  [XX%, -X] : cause XX loss'
-                    font_style: 'Body1'
-                    size_hint: 1, 0.2
-                
-                
-                
-                Widget:
-                    id: separator
-                    size_hint_y: None
-                    height: 6
-                    canvas:
-                        Color:
-                            rgba: 0., 0., 1., 0.5
-                        Rectangle:
-                            pos: 10, separator.center_y
-                            size: separator.width, 2
-                        
-                BoxLayout:
-                    orientation: 'horizontal'
-                    size_hint: (1,0.7)
-                    MDLabel:
-                        pos_hint: {'center_x': 0, 'center_y': .5}
-                        text: 'Defenders:'
-                        font_style: 'Body2'
-                        size_hint: 0.4, None
-                    MDTextField:
-                        pos_hint: {'center_x': 0, 'center_y': .5}
-                        size_hint: 0.2, None
-                        id: txt_field_pac_def
-                        hint_text: "Pasha"
-                        text: '0'
-                        input_filter: 'int'
-                        input_type: 'number'
-                        on_focus: Clock.schedule_once(lambda dt: self.select_all()) if self.focus else None
-                        on_text: app.textfield_change(self, 'def', 'pac')
-                    MDTextField:
-                        pos_hint: {'center_x': 0, 'center_y': .5}
-                        size_hint: 0.2, None
-                        id: txt_field_lvl_def
-                        hint_text: "Ftr LVL"
-                        text: '0'
-                        pos_hint: {"center_y": .5}
-                        input_filter: 'int'
-                        input_type: 'number'
-                        on_focus: Clock.schedule_once(lambda dt: self.select_all()) if self.focus else None
-                        on_text: app.textfield_change(self,  'def', 'frt_lvl')
-                    MDDropDownItem:
-                        size_hint: 0.2, None
-                        pos_hint: {'center_x': 0, 'center_y': .5}
-                        id: defenderTechButton
-                        text: 'MED'
-                        font_size: '14sp'
-                        on_release: app.defendertechmenu.open()
-                    BoxLayout:
-                        size_hint: 0.6, None
-                        pos_hint: {'center_x': 0.5, 'center_y': .5}
-                        orientation: 'horizontal'
-                        MDLabel:
-                            halign: 'right'
-                            text: "Pursuing?"
-                            font_style: 'Body2'
-                        MDCheckbox:
-                            id: defenderPursuing
-                            pos_hint: {'center_x': .95, 'center_y': .5}
-                            size_hint: None, None
-                            size: "48dp", "48dp"
-                            on_active: app.defenderpursuingselected(*args)  
-                BoxLayout:
-                    orientation: 'horizontal'
-                    spacing: 2
-                    size_hint: (1,0.3)
-                    MDTextField:
-                        id: txt_field_mrl_def
-                        hint_text: 'Morale'
-                        text: '0'
-                        pos_hint: {"center_y": .5}
-                        input_filter: 'int'
-                        input_type: 'number'
-                        on_focus: Clock.schedule_once(lambda dt: self.select_all()) if self.focus else None
-                        on_text: app.textfield_change(self, 'def', 'morale')
-                    MDRaisedButton:
-                        id: 'mrl+def'
-                        pos_hint: {"center_y": .5}
-                        size_hint: (0.3,1)
-                        text: "+"
-                        on_press: app.increment(self,'mrl','def')        
-                    MDRaisedButton:
-                        id: 'mrl-def'
-                        pos_hint: {"center_y": .5}
-                        size_hint: (0.3,1)
-                        text: "-"
-                        on_press: app.increment(self,'mrl','def')
-                    MDLabel:
-                        halign: 'right'
-                        text: "ModRoll="
-                        font_style: 'Body1'
-                    MDLabel:
-                        id: def_roll_label
-                        halign: 'left'
-                        text: "3"
-                        font_style: 'Body1'
-                        
-                MDSlider:
-                    size_hint: (1,0.4)
-                    id: defender_roll_slider
-                    hint: False
-                    min: 3
-                    max: 14
-                    value: 3
-                    on_value: app.roll_slider_change('def',self.value)
-                    
-                BoxLayout: 
-                    orientation: 'horizontal'
-                    size_hint: (1,1.1)
-                    spacing: 2
-                    
-                    MDTextField:
-                        id: txt_field_inf_def
-                        hint_text: 'Inf'
-                        font_size: '20sp'
-                        text: '0'
-                        pos_hint: {"center_y": .5}
-                        input_filter: 'int'
-                        input_type: 'number'
-                        on_focus: Clock.schedule_once(lambda dt: self.select_all()) if self.focus else None
-                        on_text: app.textfield_change(self, 'def', 'inf')
-                    
-                    BoxLayout:
-                        orientation: 'vertical'
-                        spacing: 2
-                        
-                        MDRaisedButton:
-                            size_hint: (1,0.25)
-                            id: 'inf+def'
-                            text: "+"
-                            on_press: app.increment(self,'inf','def')
-                    
-                
-                        MDRaisedButton:
-                            id: 'inf-def'
-                            size_hint: (1,0.25)
-                            text: "-"
-                            on_press: app.increment(self,'inf','def')
-                            
-                        MDRaisedButton:
-                            id: 'inf+10def'
-                            size_hint: (1,0.25)
-                            text: "+10"
-                            on_press: app.increment(self,'inf','def')
-                        
-                        MDRaisedButton:
-                            id: 'inf-10def'
-                            text: "-10"
-                            size_hint: (1,0.25)
-                            on_press: app.increment(self,'inf','def')
-                    
-                    MDTextField:
-                        id: txt_field_cav_def
-                        hint_text: "Cav"
-                        font_size: '20sp'
-                        text: '0'
-                        pos_hint: {"center_y": .5}
-                        input_filter: 'int'
-                        input_type: 'number'
-                        on_focus: Clock.schedule_once(lambda dt: self.select_all()) if self.focus else None
-                        on_text: app.textfield_change(self, 'def', 'cav')
-                        
-                    BoxLayout:
-                        orientation: 'vertical'
-                        spacing: 2
-                        MDRaisedButton:
-                            id: 'cav+def'
-                            size_hint: (1,0.25)
-                            text: "+"
-                            on_press: app.increment(self,'cav','def')
-                        
-                    
-                        MDRaisedButton:
-                            id: 'cav-def'
-                            size_hint: (1,0.25)
-                            text: "-"
-                            on_press: app.increment(self,'cav','def')
-                            
-                        MDRaisedButton:
-                            id: 'cav+10def'
-                            size_hint: (1,0.25)
-                            text: "+10"
-                            on_press: app.increment(self,'cav','def')
-                        
-                        MDRaisedButton:
-                            id: 'cav-10def'
-                            size_hint: (1,0.25)
-                            text: "-10"
-                            on_press: app.increment(self,'cav','def')
-                    
-                    MDTextField:
-                        id: txt_field_art_def
-                        hint_text: "Art"
-                        font_size: '20sp'
-                        text: '0'
-                        pos_hint: {"center_y": .5}
-                        input_filter: 'int'
-                        input_type: 'number'
-                        on_focus: Clock.schedule_once(lambda dt: self.select_all()) if self.focus else None
-                        on_text: app.textfield_change(self, 'def', 'art')
-                    
-                    BoxLayout:
-                        orientation: 'vertical'
-                        spacing: 2
-                        MDRaisedButton:
-                            id: 'art+def'
-                            size_hint: (1,0.25)
-                            text: "+"
-                            pos_hint: {"center_y": .7}
-                            on_press: app.increment(self,'art','def')
-                        
-                    
-                        MDRaisedButton:
-                            id: 'art-def'
-                            size_hint: (1,0.25)
-                            text: "-"
-                            pos_hint: {"center_y": .7}
-                            on_press: app.increment(self,'art','def')
-                            
-                        MDRaisedButton:
-                            id: 'cav+10def'
-                            size_hint: (1,0.25)
-                            text: "+10"
-                            pos_hint: {"center_y": .7}
-                            on_press: app.increment(self,'art','def')
-                        
-                        MDRaisedButton:
-                            id: 'cav-10def'
-                            size_hint: (1,0.25)
-                            text: "-10"
-                            pos_hint: {"center_y": .7}
-                            on_press: app.increment(self,'art','def')
-                    
-                    MDTextField:
-                        id: txt_field_fcv_def
-                        hint_text: "FortCV"
-                        font_size: '20sp'
-                        text: '0'
-                        pos_hint: {"center_y": .5}
-                        input_filter: 'int'
-                        input_type: 'number'
-                        on_focus: Clock.schedule_once(lambda dt: self.select_all()) if self.focus else None
-                        on_text: app.textfield_change(self, 'def', 'frt_cv')
-                        
-                    BoxLayout:
-                        orientation: 'vertical'
-                        spacing: 2
-                        MDRaisedButton:
-                            id: 'fcv+def'
-                            size_hint: (1,0.25)
-                            text: "+"
-                            pos_hint: {"center_y": .7}
-                            on_press: app.increment(self,'fcv','def')
-                        
-                    
-                        MDRaisedButton:
-                            id: 'fcv-def'
-                            size_hint: (1,0.25)
-                            text: "-"
-                            pos_hint: {"center_y": .7}
-                            on_press: app.increment(self,'fcv','def')
-                            
-                        MDRaisedButton:
-                            id: 'fcv+10def'
-                            size_hint: (1,0.25)
-                            text: "+10"
-                            pos_hint: {"center_y": .7}
-                            on_press: app.increment(self,'fcv','def')
-                        
-                        MDRaisedButton:
-                            id: 'cav-10fcv'
-                            size_hint: (1,0.25)
-                            text: "-10"
-                            pos_hint: {"center_y": .7}
-                            on_press: app.increment(self,'fcv','def')
-                    
-                    
-                MDLabel:
-                    text: 'Defenders results:'
-                    font_style: 'Caption'
-                    size_hint: 1, 0.2
-                MDLabel:
-                    id: def_results
-                    text: 'XXX.X pow  table X:  [XX%, -X] : cause XX loss'
-                    font_style: 'Body1'
-                    size_hint: 1, 0.2                      
-                            
-                
-                    
-                
-                    
-                
-                
-                
+            
+            LandScreen:
+                size_hint: (None,None)
+                size: (self.parent.width, self.parent.height)
+                id: lndscr
+     
+ 
         
         MDBottomNavigationItem:
             name: 'NavalScreen'
             text: 'Naval'
             icon: 'ship-wheel'
             
-            BoxLayout:
-                orientation: 'vertical'
-                padding: '10dp'
-                spacing: 3
-                
-                GridLayout: 
-                    cols: 3
-                    size_hint_max_y: '40dp'
+            NavalScreen:
+                size_hint: (None,None)
+                size: (self.parent.width, self.parent.height)
+                id: navscr
+            
                     
-                    Widget: 
-                    
-                    FloatLayout:
-                        MDLabel:
-                            text: 'Fire'
-                            pos_hint: {'x': .1, 'center_y': .5}
-                            font_style: 'Caption'
-
-                        MDIcon:
-                            pos_hint: {'x': 0.25, 'center_y': .5}
-                            icon: 'fire'
-                        
-                        MDSwitch:
-                            pos_hint: {'x': .4, 'center_y': .5}
-                            id: combatTypeSelector
-                            on_active: app.combatselected(*args)
-                        
-                        MDIcon:
-                            icon: 'sail-boat'
-                            pos_hint: {'x': .75, 'center_y': .5}
-                                
-                        MDLabel:
-                            pos_hint: {'x': .95, 'center_y': .5}
-                            text: "Board"
-                            font_style: 'Caption'
-                            
-                    Widget:
-                    
-                  
-                    
-                        
-                Widget:
-                    id: separator
-                    size_hint_y: None
-                    height: 6
-                    canvas:
-                        Color:
-                            rgba: 0., 0., 1., 0.5
-                        Rectangle:
-                            pos: 10, separator.center_y
-                            size: separator.width, 2 
-                
-                BoxLayout:
-                    orientation: 'horizontal'
-                    size_hint_max_y: '40dp'
-
-                    MDLabel:
-                        text: 'Attacker:'
-                        size_hint: (0.7, 1)
-                        font_style: 'Body2'
-                    MDLabel:
-                        text: 'WGmod = '
-                        halign: 'right'
-                        font_style: 'Body2'
-                    
-                    MDLabel:
-                        size_hint: (0.4, 1)
-                        id: att_wind_gauge_modifier_text
-                        halign: 'left'
-                        text: '+-'
-                        font_style: 'Body2'
-                    
-                    MDDropDownItem:
-                        pos_hint: { 'center_y': .5}
-                        id: attackerNavalTechButton
-                        text: 'GA'
-                        font_size: '14sp'
-                        on_release: app.attackernavaltechmenu.open()
-                    BoxLayout:
-                        orientation: 'horizontal'
-                        MDLabel:
-                            halign: 'right'
-                            pos_hint: {'center_y': .5}
-                            text: "Pursuing"
-                            size_hint: None, None
-                            size: "60dp", "48dp" 
-                            font_style: 'Body2'
-                        MDCheckbox:
-                            id: attackerPursuing
-                            halign: 'left'
-                            pos_hint: {'center_x': .95, 'center_y': .5}
-                            size_hint: None, None
-                            size: "48dp", "48dp" 
-                            on_active: app.attackerpursuingselected(*args)
-                BoxLayout:
-                    orientation: 'horizontal'
-                    spacing: 2
-                    size_hint: (1,0.3)
-                    MDTextField:
-                        id: txt_field_mrl_att
-                        hint_text: 'Morale'
-                        text: '0'
-                        pos_hint: {"center_y": .5}
-                        input_filter: 'int'
-                        input_type: 'number'
-                        on_focus: Clock.schedule_once(lambda dt: self.select_all()) if self.focus else None
-                        on_text: app.textfield_change(self, 'att', 'morale')
-                    MDRaisedButton:
-                        id: 'mrl+att'
-                        pos_hint: {"center_y": .5}
-                        size_hint: (0.3,1)
-                        text: "+"
-                        on_press: app.increment(self,'mrl','att')        
-                    MDRaisedButton:
-                        id: 'mrl-def'
-                        pos_hint: {"center_y": .5}
-                        size_hint: (0.3,1)
-                        text: "-"
-                        on_press: app.increment(self,'mrl','att')
-                    MDLabel:
-                        halign: 'right'
-                        text: "ModRoll="
-                        font_style: 'Body1'
-                    MDLabel:
-                        id: att_roll_label
-                        halign: 'left'
-                        text: "3"
-                        font_style: 'Body1'
-                        
-                MDSlider:
-                    size_hint: (1,0.4)
-                    id: attacker_roll_slider
-                    hint: False
-                    min: 3
-                    max: 14
-                    value: 3
-                    on_value: app.roll_slider_change('att',self.value)
-                    
-                    
-                BoxLayout: 
-                    orientation: 'horizontal'
-                    size_hint: (1,1.1)
-                    spacing: 5
-                    
-                    MDTextField:
-                        id: txt_field_trs_att
-                        hint_text: 'Trs'
-                        font_size: '20sp'
-                        text: '0'
-                        pos_hint: {"center_y": .5}
-                        input_filter: 'int'
-                        input_type: 'number'
-                        on_focus: Clock.schedule_once(lambda dt: self.select_all()) if self.focus else None
-                        on_text: app.textfield_change(self, 'att', 'trs')
-                    
-                    BoxLayout:
-                        orientation: 'vertical'
-                        spacing: 2
-                        
-                        MDRaisedButton:
-                            size_hint: (1,0.25)
-                            id: 'trs+att'
-                            text: "+"
-                            on_press: app.increment(self,'trs','att')
-                    
-                
-                        MDRaisedButton:
-                            id: 'trs-att'
-                            size_hint: (1,0.25)
-                            text: "-"
-                            on_press: app.increment(self,'trs','att')
-                            
-                        MDRaisedButton:
-                            id: 'trs+10att'
-                            size_hint: (1,0.25)
-                            text: "+10"
-                            on_press: app.increment(self,'trs','att')
-                        
-                        MDRaisedButton:
-                            id: 'trs-10att'
-                            text: "-10"
-                            size_hint: (1,0.25)
-                            on_press: app.increment(self,'trs','att')
-                    
-                    MDTextField:
-                        id: txt_field_gal_att
-                        hint_text: "Ga"
-                        font_size: '20sp'
-                        text: '0'
-                        pos_hint: {"center_y": .5}
-                        input_filter: 'int'
-                        input_type: 'number'
-                        on_focus: Clock.schedule_once(lambda dt: self.select_all()) if self.focus else None
-                        on_text: app.textfield_change(self, 'att', 'gal')
-                        
-                    BoxLayout:
-                        orientation: 'vertical'
-                        spacing: 2
-                        MDRaisedButton:
-                            id: 'gal+att'
-                            size_hint: (1,0.25)
-                            text: "+"
-                            on_press: app.increment(self,'gal','att')
-                        
-                    
-                        MDRaisedButton:
-                            id: 'gal-att'
-                            size_hint: (1,0.25)
-                            text: "-"
-                            on_press: app.increment(self,'gal','att')
-                            
-                        MDRaisedButton:
-                            id: 'gal+10att'
-                            size_hint: (1,0.25)
-                            text: "+10"
-                            on_press: app.increment(self,'gal','att')
-                        
-                        MDRaisedButton:
-                            id: 'gal-10att'
-                            size_hint: (1,0.25)
-                            text: "-10"
-                            on_press: app.increment(self,'gal','att')
-                    
-                    MDTextField:
-                        id: txt_field_war_att
-                        hint_text: "War"
-                        font_size: '20sp'
-                        text: '0'
-                        pos_hint: {"center_y": .5}
-                        input_filter: 'int'
-                        input_type: 'number'
-                        on_focus: Clock.schedule_once(lambda dt: self.select_all()) if self.focus else None
-                        on_text: app.textfield_change(self, 'att', 'war')
-                        
-                    BoxLayout:
-                        orientation: 'vertical'
-                        spacing: 2
-                        MDRaisedButton:
-                            id: 'war+att'
-                            size_hint: (1,0.25)
-                            text: "+"
-                            pos_hint: {"center_y": .7}
-                            on_press: app.increment(self,'war','att')
-                        
-                    
-                        MDRaisedButton:
-                            id: 'war-att'
-                            size_hint: (1,0.25)
-                            text: "-"
-                            pos_hint: {"center_y": .7}
-                            on_press: app.increment(self,'war','att')
-                            
-                        MDRaisedButton:
-                            id: 'war+10att'
-                            size_hint: (1,0.25)
-                            text: "+10"
-                            pos_hint: {"center_y": .7}
-                            on_press: app.increment(self,'war','att')
-                        
-                        MDRaisedButton:
-                            id: 'war-10att'
-                            size_hint: (1,0.25)
-                            text: "-10"
-                            pos_hint: {"center_y": .7}
-                            on_press: app.increment(self,'war','att')
-                    
-                    
-                        
-                    
-                
-                            
-                Widget:
-                    id: separator
-                    size_hint_y: None
-                    height: 6
-                    canvas:
-                        Color:
-                            rgba: 0., 0., 1., 0.5
-                        Rectangle:
-                            pos: 10, separator.center_y
-                            size: separator.width, 2 
-                    
-                BoxLayout:
-                    orientation: 'horizontal'
-                    size_hint_max_y: '40dp'
-
-                    MDLabel:
-                        text: 'Defender:'
-                        font_style: 'Body2'
-                    
-                    MDDropDownItem:
-                        pos_hint: {'center_x': 0.5, 'center_y': .5}
-                        id: defenderNavalTechButton
-                        text: 'GA'
-                        font_size: '14sp'
-                        on_release: app.defendernavaltechmenu.open()
-                    BoxLayout:
-                        orientation: 'horizontal'
-                        MDLabel:
-                            halign: 'right'
-                            pos_hint: {'center_y': .5}
-                            text: "Pursuing"
-                            size_hint: None, None
-                            size: "60dp", "48dp" 
-                            font_style: 'Body2'
-                        MDCheckbox:
-                            id: defenderPursuing
-                            halign: 'left'
-                            pos_hint: {'center_x': .95, 'center_y': .5}
-                            size_hint: None, None
-                            size: "48dp", "48dp" 
-                            on_active: app.defenderpursuingselected(*args)        
 '''
 
 
@@ -990,7 +54,7 @@ class EuApp(MDApp):
         self.eu = euhandler.euhandler()
         self.screen = Builder.load_string(KV)
         self.terrainmenu = MDDropdownMenu(
-            caller = self.screen.ids.terrainButton,
+            caller = self.screen.ids.lndscr.ids.terrainButton,
             items = [{"viewclass" : "MDMenuItem", "text" : "Clear"},
                      {"viewclass" : "MDMenuItem", "text" : "Mount."},
                      {"viewclass" : "MDMenuItem", "text" : "Forest"},
@@ -1002,7 +66,7 @@ class EuApp(MDApp):
         self.terrainmenu.bind(on_release=self.terrainmenu_item_selected)
 
         self.attackertechmenu = MDDropdownMenu(
-            caller=self.screen.ids.attackerTechButton,
+            caller=self.screen.ids.lndscr.ids.attackerTechButton,
             position="bottom",
             items=[{"viewclass": "MDMenuItem", "text": "MED"},
                    {"viewclass": "MDMenuItem", "text": "REN"},
@@ -1018,7 +82,7 @@ class EuApp(MDApp):
         self.attackertechmenu.bind(on_release=self.attackertechmenu_item_selected)
 
         self.defendertechmenu = MDDropdownMenu(
-            caller=self.screen.ids.defenderTechButton,
+            caller=self.screen.ids.lndscr.ids.defenderTechButton,
             items=[{"viewclass": "MDMenuItem", "text": "MED"},
                    {"viewclass": "MDMenuItem", "text": "REN"},
                    {"viewclass": "MDMenuItem", "text": "ARQ"},
@@ -1033,7 +97,7 @@ class EuApp(MDApp):
         self.defendertechmenu.bind(on_release=self.defendertechmenu_item_selected)
 
         self.attackernavaltechmenu = MDDropdownMenu(
-            caller=self.screen.ids.attackerNavalTechButton,
+            caller=self.screen.ids.navscr.ids.attackerNavalTechButton,
             items=[{"viewclass": "MDMenuItem", "text": "GA"},
                    {"viewclass": "MDMenuItem", "text": "CAR"},
                    {"viewclass": "MDMenuItem", "text": "GLN"},
@@ -1048,7 +112,7 @@ class EuApp(MDApp):
         self.attackernavaltechmenu.bind(on_release=self.attackernavaltechmenu_item_selected)
 
         self.defendernavaltechmenu = MDDropdownMenu(
-            caller=self.screen.ids.defenderNavalTechButton,
+            caller=self.screen.ids.navscr.ids.defenderNavalTechButton,
             items=[{"viewclass": "MDMenuItem", "text": "GA"},
                    {"viewclass": "MDMenuItem", "text": "CAR"},
                    {"viewclass": "MDMenuItem", "text": "GLN"},
@@ -1064,52 +128,54 @@ class EuApp(MDApp):
 
 
     def terrainmenu_item_selected(self, instance_menu, instance_menu_item):
-        self.screen.ids.terrainButton.set_item(instance_menu_item.text)
+        self.screen.ids.lndscr.ids.terrainButton.set_item(instance_menu_item.text)
         terrconv = {'Clear': 'clear', 'Mount.': 'mountain', 'Forest': 'forest', 'Marsh': 'marsh'}
         self.eu.terrain = terrconv[instance_menu_item.text]
         self.update()
         self.terrainmenu.dismiss()
 
     def attackernavaltechmenu_item_selected(self, instance_menu, instance_menu_item):
-        self.screen.ids.attackerNavalTechButton.set_item(instance_menu_item.text)
+        self.screen.ids.navscr.ids.attackerNavalTechButton.set_item(instance_menu_item.text)
         self.eu.attacker['ntech'] = instance_menu_item.text
         self.update()
         self.attackernavaltechmenu.dismiss()
 
     def defendernavaltechmenu_item_selected(self, instance_menu, instance_menu_item):
-        self.screen.ids.defenderNavalTechButton.set_item(instance_menu_item.text)
+        self.screen.ids.navscr.ids.defenderNavalTechButton.set_item(instance_menu_item.text)
         self.eu.defender['ntech'] = instance_menu_item.text
         self.update()
         self.defendernavaltechmenu.dismiss()
 
 
     def attackertechmenu_item_selected(self, instance_menu, instance_menu_item):
-        self.screen.ids.attackerTechButton.set_item(instance_menu_item.text)
+        self.screen.ids.lndscr.ids.attackerTechButton.set_item(instance_menu_item.text)
         self.eu.attacker['ltech'] = instance_menu_item.text
         self.update()
         self.attackertechmenu.dismiss()
 
     def defendertechmenu_item_selected(self, instance_menu, instance_menu_item):
-        self.screen.ids.defenderTechButton.set_item(instance_menu_item.text)
+        self.screen.ids.lndscr.ids.defenderTechButton.set_item(instance_menu_item.text)
         self.eu.defender['ltech'] = instance_menu_item.text
         self.update()
         self.defendertechmenu.dismiss()
 
-    def roll_slider_change(self,att_or_def,value):
+    def roll_slider_change(self, att_or_def,value):
         rounded = math.ceil(value)
         if att_or_def == 'att':
-            self.screen.ids.att_roll_label.text = str(rounded)
+            self.screen.ids.lndscr.ids.att_roll_label.text = str(rounded)
+            self.screen.ids.navscr.ids.att_roll_label.text = str(rounded)
             self.eu.attacker['roll'] = rounded
         elif att_or_def == 'def':
-            self.screen.ids.def_roll_label.text = str(rounded)
+            self.screen.ids.lndscr.ids.def_roll_label.text = str(rounded)
+            self.screen.ids.navscr.ids.def_roll_label.text = str(rounded)
             self.eu.defender['roll'] = rounded
         self.update()
 
     def assaultselected(self, instance, value):
         if value:
             self.eu.assault = value
-            self.screen.ids.defenderPursuing.active = False
-            self.screen.ids.attackerPursuing.active = False
+            self.screen.ids.lndscr.ids.defenderPursuing.active = False
+            self.screen.ids.lndscr.ids.attackerPursuing.active = False
             if dbug:
                 print('Assault is ', value)
         else:
@@ -1121,9 +187,11 @@ class EuApp(MDApp):
     def defenderpursuingselected(self, instance, value):
         if value:
             self.eu.defender_pursuing = value
-            self.screen.ids.combatTypeSelector.active = True
-            self.screen.ids.attackerPursuing.active = False
-            self.screen.ids.assaultSelector.active = False
+            self.screen.ids.lndscr.ids.combatTypeSelector.active = True
+            self.screen.ids.lndscr.ids.attackerPursuing.active = False
+            self.screen.ids.navscr.ids.combatTypeSelector.active = True
+            self.screen.ids.navscr.ids.attackerPursuing.active = False
+            self.screen.ids.lndscr.ids.assaultSelector.active = False
             if dbug:
                 print('Defender pursuing is ', value)
         else:
@@ -1142,9 +210,11 @@ class EuApp(MDApp):
     def attackerpursuingselected(self, instance, value):
         if value:
             self.eu.attacker_pursuing = value
-            self.screen.ids.combatTypeSelector.active = True
-            self.screen.ids.defenderPursuing.active = False
-            self.screen.ids.assaultSelector.active = False
+            self.screen.ids.lndscr.ids.combatTypeSelector.active = True
+            self.screen.ids.lndscr.ids.defenderPursuing.active = False
+            self.screen.ids.navscr.ids.combatTypeSelector.active = True
+            self.screen.ids.navscr.ids.defenderPursuing.active = False
+            self.screen.ids.lndscr.ids.assaultSelector.active = False
             if dbug:
                 print('Attacker pursuing is ', value)
         else:
@@ -1154,14 +224,18 @@ class EuApp(MDApp):
         self.update()
 
     def combatselected(self, instance, value):
+        self.screen.ids.lndscr.ids.combatTypeSelector.active = value
+        self.screen.ids.navscr.ids.combatTypeSelector.active = value
         if value:
             self.eu.type_of_combat = 'shock'
             if dbug:
                 print('shock phase')
         else:
             self.eu.type_of_combat = 'fire'
-            self.screen.ids.defenderPursuing.active = False
-            self.screen.ids.attackerPursuing.active = False
+            self.screen.ids.lndscr.ids.defenderPursuing.active = False
+            self.screen.ids.lndscr.ids.attackerPursuing.active = False
+            self.screen.ids.navscr.ids.defenderPursuing.active = False
+            self.screen.ids.navscr.ids.attackerPursuing.active = False
             if dbug:
                 print('fire phase')
         self.update()
@@ -1184,14 +258,14 @@ class EuApp(MDApp):
                 self.eu.defender[unit] = 0
         self.update()
 
-    def increment(self, buttonInstance, unit, att_or_def):
+    def increment(self, buttonInstance, screen, unit, att_or_def):
         #Define the id of the text field that needs to be changed
         textId = 'txt_field_'+unit+'_'+att_or_def
         #Get the current value of the field
-        if not self.screen.ids[textId].text.isdigit():
+        if not self.screen.ids[screen].ids[textId].text.isdigit():
             value = 0
         else:
-            value = int(self.screen.ids[textId].text)
+            value = int(self.screen.ids[screen].ids[textId].text)
         #Read the text of the button to decide how to change
         if buttonInstance.text == '+':
             value += 1
@@ -1203,7 +277,7 @@ class EuApp(MDApp):
             value += -10
         if value < 0:
             value = 0
-        self.screen.ids[textId].text = str(value)
+        self.screen.ids[screen].ids[textId].text = str(value)
 
 
     def update(self):
@@ -1214,16 +288,33 @@ class EuApp(MDApp):
             self.eu.results['attresult'], self.eu.results['ainflictmorale'],
             self.eu.results['ainflict']
         )
-        self.screen.ids['att_results'].text = att_string
+        self.screen.ids.lndscr.ids['att_results'].text = att_string
 
         def_string = base_string.format(
             self.eu.results['defstr'], self.eu.results['tbldef'],
             self.eu.results['defresult'], self.eu.results['dinflictmorale'],
             self.eu.results['dinflict']
         )
-        self.screen.ids['def_results'].text = def_string
+        self.screen.ids.lndscr.ids['def_results'].text = def_string
         if dbug:
             self.eu.fancyprint()
+
+        att_navstring = base_string.format(
+            self.eu.results['attstr_n'], self.eu.results['tblatt_n'],
+            self.eu.results['attresult_n'], self.eu.results['ainflictmorale_n'],
+            self.eu.results['ainflict_n']
+        )
+        self.screen.ids.navscr.ids['att_results'].text = att_navstring
+
+        def_navstring = base_string.format(
+            self.eu.results['defstr_n'], self.eu.results['tbldef_n'],
+            self.eu.results['defresult_n'], self.eu.results['dinflictmorale_n'],
+            self.eu.results['dinflict_n']
+        )
+        self.screen.ids.navscr.ids['def_results'].text = def_navstring
+
+        self.screen.ids.navscr.ids.att_wind_gauge_modifier_text.text = self.eu.results['attwindgauge']
+        self.screen.ids.navscr.ids.def_wind_gauge_modifier_text.text = self.eu.results['defwindgauge']
 
 
     def get_id(self, instance):

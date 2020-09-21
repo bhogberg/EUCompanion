@@ -158,6 +158,15 @@ class eutables():
             ('MAN', 5),
             ('DEN', 6)
         ])
+        self.navtech = dict([
+            ('GA', 0),
+            ('CAR', 1),
+            ('GLN', 2),
+            ('LS', 3),
+            ('BA', 4),
+            ('VE', 5),
+            ('T-D', 6)
+        ])
 
         self.landfire = [['na', 'na', 'na', 'na', 'na', 'na', 'na'],
                          ['C', 'C', 'C', 'D', 'E', 'E', 'E'],
@@ -174,6 +183,22 @@ class eutables():
                           ['F', 'F', 'F', 'F', 'F', 'G', 'H'],
                           ['F', 'F', 'F', 'F', 'F', 'F', 'G'],
                           ['F', 'F', 'F', 'F', 'F', 'F', 'F']]
+
+        self.navalfire = [['E', 'E', 'E', 'E', 'E', 'na', 'na'],
+                         ['E', 'C', 'D', 'E', 'E', 'E', 'na'],
+                         ['B', 'A', 'B', 'B', 'C', 'D', 'E'],
+                         ['B', 'A', 'B', 'B', 'C', 'D', 'E'],
+                         ['B', 'A', 'A', 'B', 'B', 'C', 'D'],
+                         ['B', 'A', 'A', 'B', 'B', 'C', 'C'],
+                         ['A', 'A', 'A', 'A', 'A', 'B', 'C']]
+
+        self.navalshock = [['A', 'A', 'B', 'C', 'D', 'E', 'E'],
+                          ['E', 'B', 'C', 'D', 'D', 'E', 'E'],
+                          ['B', 'A', 'B', 'B', 'C', 'D', 'E'],
+                          ['B', 'A', 'B', 'B', 'C', 'C', 'D'],
+                          ['B', 'A', 'B', 'B', 'B', 'C', 'D'],
+                          ['B', 'A', 'A', 'B', 'B', 'C', 'C'],
+                          ['A', 'A', 'A', 'A', 'A', 'B', 'C']]
 
         self.attacker_assault_fire = [
             ['na', 'na', 'na', 'na', 'na', 'na', 'na'],
@@ -214,6 +239,15 @@ class eutables():
             ('pac', [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0])
         ])
 
+        self.wind_gauge_table = [
+            ['na', '+2', '+1', '0', '0', '-1', '-2'],
+            ['-2', '0', '0', '-1', '-1', '-2', '-3'],
+            ['-1', '0', '0', '-1', '-1', '-1', '-2'],
+            ['0', '+1', '+1', '0', '0', '-1', '-2'],
+            ['0', '+1', '+1', '0', '0', '0', '-1'],
+            ['+1', '+2', '+1', '0', '0', '0', '0'],
+            ['+2', '+3', '+2', '+1', '+1', '0', '0']]
+
     def getresult(self, table_column, roll):
         if roll < 0:
             mroll = 0
@@ -231,6 +265,20 @@ class eutables():
             return self.firestr[type_of_unit][self.landtech[tech]]
         else:
             return self.shockstr[type_of_unit][self.landtech[tech]]
+
+    def getstr_nav(self,type_of_unit,phase):
+        if phase == 'fire':
+            if type_of_unit == 'trs':
+                return 0
+            elif type_of_unit == 'gal':
+                return 0.5
+            else:
+                return 1
+        else:
+            return 1
+
+    def getwindgauge(self,player_tech, opposing_tech):
+        return self.wind_gauge_table[self.navtech[player_tech]][self.navtech[opposing_tech]]
 
     def gettables(self, land_or_naval, type_of_combat, player_tech, opposing_tech, pursuit=False, assault=False,
                   attacker=False):
@@ -253,3 +301,12 @@ class eutables():
                     return 'E'
                 else:
                     return self.landshock[self.landtech[player_tech]][self.landtech[opposing_tech]]
+        else:
+            #naval combat
+            if type_of_combat == 'fire':
+                return self.navalfire[self.navtech[player_tech]][self.navtech[opposing_tech]]
+            elif type_of_combat == 'shock':
+                if pursuit:
+                    return 'E'
+                else:
+                    return self.navalshock[self.navtech[player_tech]][self.navtech[opposing_tech]]
